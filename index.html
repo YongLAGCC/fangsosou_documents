@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=11' />
+    <title>房搜搜API文档</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href='css/base.css' rel='stylesheet' />
+    <link href='css/style.css' rel='stylesheet' />
+    <link href='css/railscasts.css' rel='stylesheet' />
+  </head>
+  <body>
+    <!--START--><div id='app'><div class="container unlimiter" data-reactroot=""><div class="fixed-top fixed-right space-left16"><div class="fill-light col6 pin-right"></div></div><div class="space-top5 scroll-styled overflow-auto pad1 width16 sidebar fixed-left fill-dark dark"><div class="pad0x small"><div class="small pad0x quiet space-top1">Fangsousou API</div><a href="#文档介绍" class="line-height15 pad0x pad00y quiet block ">文档介绍</a><div class="small pad0x quiet space-top1">User System API</div><div class="small pad0x quiet space-top1">House API</div><div class="small pad0x quiet space-top1">Search API</div><div class="small pad0x quiet space-top1">Contact API</div><div class="small pad0x quiet space-top1">News API</div><div class="small pad0x quiet space-top1">Ads API</div><div class="small pad0x quiet space-top1">Report API</div></div></div><div class="space-left16"><div class=""><div class="clearfix"><div data-title="文档介绍" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h2 id="文档介绍">文档介绍</h2>
+<p>###房搜搜 手机客户端开发 API 文档</p>
+<p>用户头像资源前缀 <a href="https://api.fangsosou.com/static/icon/">https://api.fangsosou.com/static/icon/</a>,</p>
+<p>其他所有图片资源前缀： <a href="https://api.fangsosou.com/static/img/">https://api.fangsosou.com/static/img/</a>,</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><h4 id="部分保护性端口需有效的token才能访问。-如果没有有效token服务器会返回-403，-unauthorized错误。-在发送请求时，请在请求的-header-内加上-csrf_token-token。-前端用户登陆成功后服务器一定会返回有效token，详情可参考用户api文档。">部分保护性端口需有效的token才能访问。 如果没有有效token服务器会返回 403， Unauthorized错误。 在发送请求时，请在请求的 Header 内加上 CSRF_TOKEN {{token}}。 前端用户登陆成功后服务器一定会返回有效token，详情可参考用户API文档。</h4>
+<pre class='hljs'>var config = {
+    headers: {
+        CSRF_TOKEN: token
+    }
+}</pre>
+</div></div><div data-title="普通用户登录" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="普通用户登录">普通用户登录</h3>
+<p>普通用户登录</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td>(required) 电话号码</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>(required) 密码</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/login/sms</div>
+    </div>
+<h4 id="example-response">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"token"</span>: <span class="hljs-string">"{JWT TOKEN}"</span>
+}</pre>
+<h4 id="status-code">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="创建新用户(1/2)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="创建新用户12">创建新用户(1/2)</h3>
+<p>创建新用户第一步，提交手机号码查询是否重复</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td>(required) 电话号码 默认区号为 +1</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/signup/sms</div>
+    </div>
+<h4 id="example-response-1">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"carrier"</span>: <span class="hljs-string">"T-Mobile USA, Inc."</span>,
+    <span class="hljs-attr">"is_cellphone"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Text message sent to +1 347-825-7667."</span>,
+    <span class="hljs-attr">"seconds_to_expire"</span>: <span class="hljs-number">599</span>,
+    <span class="hljs-attr">"uuid"</span>: <span class="hljs-string">"31571100-de46-0135-96e4-126cf2d1e912"</span>,
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>
+}</pre>
+<h4 id="status-code-1">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="创建新用户 (2/2)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="创建新用户-22">创建新用户 (2/2)</h3>
+<p>创建新用户第二步，提交验证码查询是否正确，如果正确创建用户</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td>(required) 电话号码 默认区号为 +1</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>(required) 密码</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>(required) 验证码</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/signup/verify</div>
+    </div>
+<h4 id="example-response-2">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"user"</span>,
+        <span class="hljs-attr">"email"</span>: <span class="hljs-string">"/"</span>,
+        <span class="hljs-attr">"phone"</span>: <span class="hljs-string">"6466397087"</span>,
+        <span class="hljs-attr">"password"</span>: <span class="hljs-string">"$2a$10$SIPGQLIDyJILhZOdl.sWC.qDUVIoax6Z9tkmW9yBHWLUAIxomln0S"</span>,
+        <span class="hljs-attr">"icon"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"default"</span>,
+            <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"image/png"</span>
+        },
+        <span class="hljs-attr">"created"</span>: <span class="hljs-string">"2018-01-18T06:26:27.743Z"</span>,
+        <span class="hljs-attr">"active"</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"5a603e13991dba06c04ead34"</span>
+    }
+}</pre>
+<h4 id="status-code-2">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="忘记密码(1/3)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="忘记密码13">忘记密码(1/3)</h3>
+<p>忘记密码第一步，提交手机号码查询是否存在</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td>(required) 电话号码 默认区号为 +1</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/verify/agent/phone</div>
+    </div>
+<h4 id="example-response-3">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"carrier"</span>: <span class="hljs-string">"T-Mobile USA, Inc."</span>,
+    <span class="hljs-attr">"is_cellphone"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Text message sent to +1 347-825-7667."</span>,
+    <span class="hljs-attr">"seconds_to_expire"</span>: <span class="hljs-number">599</span>,
+    <span class="hljs-attr">"uuid"</span>: <span class="hljs-string">"31571100-de46-0135-96e4-126cf2d1e912"</span>,
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>
+}</pre>
+<h4 id="status-code-3">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="忘记密码 (2/3)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="忘记密码-23">忘记密码 (2/3)</h3>
+<p>忘记密码第二步，提交验证码查询是否正确，如果正确返回true</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phone</code></td>
+<td>(required) 电话号码 默认区号为 +1</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>(required) 验证码</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/verify/agent/code</div>
+    </div>
+<h4 id="example-response-4">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"user"</span>,
+        <span class="hljs-attr">"email"</span>: <span class="hljs-string">"/"</span>,
+        <span class="hljs-attr">"phone"</span>: <span class="hljs-string">"6466397087"</span>,
+        <span class="hljs-attr">"password"</span>: <span class="hljs-string">"$2a$10$SIPGQLIDyJILhZOdl.sWC.qDUVIoax6Z9tkmW9yBHWLUAIxomln0S"</span>,
+        <span class="hljs-attr">"icon"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"default"</span>,
+            <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"image/png"</span>
+        },
+        <span class="hljs-attr">"created"</span>: <span class="hljs-string">"2018-01-18T06:26:27.743Z"</span>,
+        <span class="hljs-attr">"active"</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"5a603e13991dba06c04ead34"</span>
+    }
+}</pre>
+<h4 id="status-code-4">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="忘记密码 (3/3)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="忘记密码-33">忘记密码 (3/3)</h3>
+<p>忘记密码第三步，提交更改后的密码，提交成功后</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>password</code></td>
+<td>(required) 密码</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/verify/agent/password</div>
+    </div>
+<h4 id="example-response-5">Example response</h4>
+<pre class='hljs'>{
+    "success": true,
+    "data": {
+        //用户对象
+    }
+}</pre>
+<h4 id="status-code-5">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="Logout" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="logout">Logout</h3>
+<p>Delete "CSRF_TOKEN" cookie on the server-side (Logout)</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/logout</div>
+    </div>
+<h4 id="example-response-6">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>
+}</pre>
+</div></div><div data-title="View Agent Info By AgentID" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="view-agent-info-by-agentid">View Agent Info By AgentID</h3>
+<p>View Agent Info with AgentID (6位数)</p>
+<p>icon file will be on <code>https://api.fangsosou.com/static/icon/{filename}</code></p>
+<p>Request for Agent Info with Agent's 6-digit unique code.</p>
+<p>Example AgentID: '123455'</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><pre class='hljs'>//传回的图片为二进制文件，web端的做法是：
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"userAvatar"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://api.fangsosou.com/static/icon/profileImage-1515098664799"</span>&gt;</span></pre>
+<div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/info/findAgentById/<span class="strong">{AgentID}</span></div>
+    </div>
+<h4 id="example-response-7">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"{OBJID}"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"agent"</span>,
+        <span class="hljs-attr">"agentID"</span>: <span class="hljs-string">"{AgentID}"</span>,
+        <span class="hljs-attr">"username"</span>: <span class="hljs-string">"{Agent's Username}"</span>,
+        <span class="hljs-attr">"email"</span>: <span class="hljs-string">"{Agent's Email}"</span>,
+        <span class="hljs-attr">"company"</span>: <span class="hljs-string">"{Agent's Company Name}"</span>,
+        <span class="hljs-attr">"phone"</span>: <span class="hljs-string">"{Agent's Phone Number}"</span>,
+        <span class="hljs-attr">"street"</span>: <span class="hljs-string">"{Agent's Office Street}"</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"{Agent's Office City}"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"{Agent's Office state}"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"{Agent's Office zipcode}"</span>,
+        <span class="hljs-attr">"url"</span>: <span class="hljs-string">"{Agent's Company URL}"</span>,
+        <span class="hljs-attr">"icon"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"{icon file}"</span>,
+            <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{icon type}"</span>
+        },
+        <span class="hljs-attr">"card"</span>: {
+            <span class="hljs-attr">"file"</span>: <span class="hljs-string">"{icon file}"</span>,
+            <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{icon type}"</span>
+        },
+        <span class="hljs-attr">"wechat"</span>: <span class="hljs-string">"wechat ID"</span>,
+        <span class="hljs-attr">"view"</span>: <span class="hljs-string">"{view count}"</span>,
+        <span class="hljs-attr">"qr_code"</span>: <span class="hljs-string">"{BASE64 Encoded QR code}"</span>
+    }
+}</pre>
+<h4 id="status-code-6">Status Code</h4>
+<pre class='hljs'>200 OK
+404 Agent Not Found
+500 Server Error</pre>
+</div></div><div data-title="Edit User Icon" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="edit-user-icon">Edit User Icon</h3>
+<p>Edit User Icon when a vaild JWT token is present</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icon</code></td>
+<td>(required) must be an Image file</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/info/edit/icon</div>
+    </div>
+<h4 id="example-response-8">Example response</h4>
+<pre class='hljs'>{
+ <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"message"</span>: {
+    <span class="hljs-attr">"updated"</span>:<span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"newIcon"</span>: {
+        <span class="hljs-attr">"file"</span>: <span class="hljs-string">"{filename}"</span>,
+        <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{filetype}"</span>
+    }
+  }
+}</pre>
+<h4 id="status-code-7">Status Code</h4>
+<pre class='hljs'>200 OK
+403 Invaild Token
+500 Server Error</pre>
+</div></div><div data-title="微信注册" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="微信注册">微信注册</h3>
+<p>接受一个微信 OPENID 来注册新用户</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wechatID</code></td>
+<td>(required) 微信 OPENID</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>(required) 微信用户传回的头像</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/signup/wechat</div>
+    </div>
+<h4 id="example-response-9">Example response</h4>
+<pre class='hljs'>{
+    "username": {微信提供的用户名},
+    "type": "wechatUser",
+    "icon": {
+        "file": {微信用户头像},
+        "mimetype": 'image/png'
+    },
+    "created": {创建日期},
+    "active": true
+    }</pre>
+<h4 id="status-code-8">Status Code</h4>
+<pre class='hljs'>200 OK
+403 Invaild Token
+500 Server Error</pre>
+</div></div><div data-title="微信登录" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="微信登录">微信登录</h3>
+<p>接受一个微信 OPENID 来登录</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wechatID</code></td>
+<td>(required) 微信 OPENID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/auth/login/wechat</div>
+    </div>
+<h4 id="example-response-10">Example response</h4>
+<pre class='hljs'>{
+    "success": true,
+    "token": {用户 token}
+}</pre>
+<h4 id="status-code-9">Status Code</h4>
+<pre class='hljs'>200 OK
+403 Invaild Token
+500 Server Error</pre>
+</div></div><div data-title="读取单个房源详情" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="读取单个房源详情">读取单个房源详情</h3>
+<p>用房源ID 请求房源详情</p>
+<p>带星号的字段都是新增或更新后的字段，请务必检查更新你的对应接口</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/house/detail/<span class="strong">{OBJID}</span></div>
+    </div>
+<h4 id="example-response-11">Example Response</h4>
+<pre class='hljs'>{
+    "_id": "{OBJID}",
+    "type": string, //买或卖
+    "agentID": {
+        "agentID": string, //中介ID
+        "agentAvatar": {
+            //中介头像
+        },
+        "agentName": string, //中介名字
+        "agentPhone": string, //中介电话 ***********************************
+        "agentCompany" : string //中介公司 ***********************************
+    },
+    "detail": {
+        "title": string, //标题
+        "description": string, //介绍
+        "type": string, //房屋类型
+        "price": number, //价格
+        "family": string, //几单元 *********************************
+        "lotSize": string, //总面积 *********************************
+        "buildingSize": number, //房屋面积 *********************************
+        "beds": number, //卧室
+        "baths": number, //卫生间
+        "build": string, //建筑年份
+        "hasAttic": boolean, //有阁楼 *********************************
+        "hasBasement": boolean, //有地下室 *********************************
+        "comcharge": number, //公寓税 *********************************
+        "maitfee": number, //管理费 *********************************
+        "fliptax": number, //翻转税 *********************************
+        "rooms": number, //房间数量 *********************************
+        "material": string, //建筑材料 *********************************
+        "propTax": number, //地产税 *********************************
+        "house_images":[
+            {
+                "fieldname": "{field name}",
+                "originalname": "{original name}",
+                "encoding": "{encoding}",
+                "mimetype": "{mimet ype}",
+                "destination": "{destination}",
+                "filename": "{file name}",
+                "path": "{path}",
+                "size": "{size}"
+            }
+            //JSON Array
+        ]
+    },
+    "location": {
+        "street": "{street}",
+        "city": "{city}",
+        "county": "{county}",
+        "gpcode": "{google place code}",
+        "state": "{State}",
+        "zipcode": "{Zipcode}",
+        "zoning": "{Gov Zone}" //划区 *********************************
+    },
+    "status": {
+        "active": "{true||false}",
+        "views": number //浏览量 *********************************
+    },
+    "created": "{current Timestamp}",
+    "lastUpdated": "{last updated Timestamp}"
+}</pre>
+<h4 id="status-code-10">Status Code</h4>
+<pre class='hljs'>200 OK
+404 House Not Found
+500 Server Error</pre>
+</div></div><div data-title="Fetch Listing (filter)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="fetch-listing-filter">Fetch Listing (filter)</h3>
+<p>get property listing</p>
+<p>filter house listing by posting parameter </p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>(required) buy / rent</td>
+</tr>
+<tr>
+<td><code>requestPage</code></td>
+<td>(required) the page needed</td>
+</tr>
+<tr>
+<td><code>county</code></td>
+<td>(post parameter not required) county</td>
+</tr>
+<tr>
+<td><code>city</code></td>
+<td>(post parameter not required) city</td>
+</tr>
+<tr>
+<td><code>priceMin</code></td>
+<td>(post parameter not required) the price Min value</td>
+</tr>
+<tr>
+<td><code>priceMax</code></td>
+<td>(post parameter not required) the price Max value</td>
+</tr>
+<tr>
+<td><code>propertyType</code></td>
+<td>(post parameter not required) property type of house</td>
+</tr>
+<tr>
+<td><code>family</code></td>
+<td>(post parameter not required) the value of total family</td>
+</tr>
+<tr>
+<td><code>beds</code></td>
+<td>(post parameter not required) the value of beds</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/listing/filterHouseByParams</div>
+    </div>
+<h4 id="example-response-12">Example Response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"pageCount"</span>: <span class="hljs-string">"{total page number of house listing page}"</span>,
+    <span class="hljs-attr">"results"</span>: [
+        {
+            <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"{OBJID}"</span>,
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+            <span class="hljs-attr">"agentID"</span>: <span class="hljs-string">"{agent Id}"</span>,
+            <span class="hljs-attr">"detail"</span>: {
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"{title}"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"{description}"</span>,
+                <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+                <span class="hljs-attr">"price"</span>: <span class="hljs-string">"{price}"</span>,
+                <span class="hljs-attr">"totalArea"</span>: <span class="hljs-string">"{total area}"</span>,
+                <span class="hljs-attr">"beds"</span>: <span class="hljs-string">"{total beds}"</span>,
+                <span class="hljs-attr">"baths"</span>: <span class="hljs-string">"{total baths}"</span>,
+                <span class="hljs-attr">"build"</span>: <span class="hljs-string">"{build time}"</span>,
+                <span class="hljs-attr">"credit_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"income_report"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"background_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"house_images"</span>:[
+                    {
+                        <span class="hljs-attr">"fieldname"</span>: <span class="hljs-string">"{field name}"</span>,
+                        <span class="hljs-attr">"originalname"</span>: <span class="hljs-string">"{original name}"</span>,
+                        <span class="hljs-attr">"encoding"</span>: <span class="hljs-string">"{encoding}"</span>,
+                        <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{mimet ype}"</span>,
+                        <span class="hljs-attr">"destination"</span>: <span class="hljs-string">"{destination}"</span>,
+                        <span class="hljs-attr">"filename"</span>: <span class="hljs-string">"{file name}"</span>,
+                        <span class="hljs-attr">"path"</span>: <span class="hljs-string">"{path}"</span>,
+                        <span class="hljs-attr">"size"</span>: <span class="hljs-string">"{size}"</span>
+                    }
+                    //JSON Array
+                ]
+            },
+            <span class="hljs-attr">"location"</span>: {
+                <span class="hljs-attr">"street"</span>: <span class="hljs-string">"{street}"</span>,
+                <span class="hljs-attr">"city"</span>: <span class="hljs-string">"{city}"</span>,
+                <span class="hljs-attr">"county"</span>: <span class="hljs-string">"{county}"</span>,
+                <span class="hljs-attr">"gpcode"</span>: <span class="hljs-string">"{google place code}"</span>,
+                <span class="hljs-attr">"state"</span>: <span class="hljs-string">"{State}"</span>,
+                <span class="hljs-attr">"zipcode"</span>: <span class="hljs-string">"{Zipcode}"</span>,
+                <span class="hljs-attr">"zone"</span>: <span class="hljs-string">"{Gov Zone}"</span>
+            },
+            <span class="hljs-attr">"status"</span>: {
+                <span class="hljs-attr">"active"</span>: <span class="hljs-string">"{true||false}"</span>
+            },
+            <span class="hljs-attr">"created"</span>: <span class="hljs-string">"{current Timestamp}"</span>,
+            <span class="hljs-attr">"lastUpdated"</span>: <span class="hljs-string">"{last updated Timestamp}"</span>,
+            <span class="hljs-attr">"view"</span>: <span class="hljs-string">"{totle view}"</span>
+        },
+        ... JSON Array
+    ]
+}</pre>
+<h4 id="status-code-11">Status Code</h4>
+<pre class='hljs'>200 OK
+404 House Not Found
+500 Server Error</pre>
+</div></div><div data-title="中介ID找房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="中介id找房源">中介ID找房源</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agentID</code></td>
+<td>(必须) 中介UUID</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>(必须) 页数</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/listing/fetchHouseByAgentID</div>
+    </div>
+<h4 id="example-response-13">Example Response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"pageCount"</span>: <span class="hljs-string">"{total page number of house listing page}"</span>,
+    <span class="hljs-attr">"results"</span>: [
+        {
+            <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"{OBJID}"</span>,
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+            <span class="hljs-attr">"agentID"</span>: <span class="hljs-string">"{agent Id}"</span>,
+            <span class="hljs-attr">"detail"</span>: {
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"{title}"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"{description}"</span>,
+                <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+                <span class="hljs-attr">"price"</span>: <span class="hljs-string">"{price}"</span>,
+                <span class="hljs-attr">"totalArea"</span>: <span class="hljs-string">"{total area}"</span>,
+                <span class="hljs-attr">"beds"</span>: <span class="hljs-string">"{total beds}"</span>,
+                <span class="hljs-attr">"baths"</span>: <span class="hljs-string">"{total baths}"</span>,
+                <span class="hljs-attr">"build"</span>: <span class="hljs-string">"{build time}"</span>,
+                <span class="hljs-attr">"credit_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"income_report"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"background_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+                <span class="hljs-attr">"house_images"</span>:[
+                    {
+                        <span class="hljs-attr">"fieldname"</span>: <span class="hljs-string">"{field name}"</span>,
+                        <span class="hljs-attr">"originalname"</span>: <span class="hljs-string">"{original name}"</span>,
+                        <span class="hljs-attr">"encoding"</span>: <span class="hljs-string">"{encoding}"</span>,
+                        <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{mimet ype}"</span>,
+                        <span class="hljs-attr">"destination"</span>: <span class="hljs-string">"{destination}"</span>,
+                        <span class="hljs-attr">"filename"</span>: <span class="hljs-string">"{file name}"</span>,
+                        <span class="hljs-attr">"path"</span>: <span class="hljs-string">"{path}"</span>,
+                        <span class="hljs-attr">"size"</span>: <span class="hljs-string">"{size}"</span>
+                    }
+                    //JSON Array
+                ]
+            },
+            <span class="hljs-attr">"location"</span>: {
+                <span class="hljs-attr">"street"</span>: <span class="hljs-string">"{street}"</span>,
+                <span class="hljs-attr">"city"</span>: <span class="hljs-string">"{city}"</span>,
+                <span class="hljs-attr">"county"</span>: <span class="hljs-string">"{county}"</span>,
+                <span class="hljs-attr">"gpcode"</span>: <span class="hljs-string">"{google place code}"</span>,
+                <span class="hljs-attr">"state"</span>: <span class="hljs-string">"{State}"</span>,
+                <span class="hljs-attr">"zipcode"</span>: <span class="hljs-string">"{Zipcode}"</span>,
+                <span class="hljs-attr">"zone"</span>: <span class="hljs-string">"{Gov Zone}"</span>
+            },
+            <span class="hljs-attr">"status"</span>: {
+                <span class="hljs-attr">"active"</span>: <span class="hljs-string">"{true||false}"</span>
+            },
+            <span class="hljs-attr">"created"</span>: <span class="hljs-string">"{current Timestamp}"</span>,
+            <span class="hljs-attr">"lastUpdated"</span>: <span class="hljs-string">"{last updated Timestamp}"</span>,
+            <span class="hljs-attr">"view"</span>: <span class="hljs-string">"{totle view}"</span>
+        },
+        ... JSON Array
+    ]
+}</pre>
+<h4 id="status-code-12">Status Code</h4>
+<pre class='hljs'>200 OK
+404 House Not Found
+500 Server Error</pre>
+</div></div><div data-title="最新房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="最新房源">最新房源</h3>
+<p>获取最新房源</p>
+<p>**count代表请求的数量，如count 是 5， 会返回最新的5条数据。 如果count等于0， 会返回所有数据的列表。</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/listing/fetch/new/<span class="strong">{count}</span></div>
+    </div>
+<h4 id="example-response-14">Example Response</h4>
+<pre class='hljs'>[
+     {
+        <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"{OBJID}"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+        <span class="hljs-attr">"agentID"</span>: <span class="hljs-string">"{agent Id}"</span>,
+        <span class="hljs-attr">"detail"</span>: {
+            <span class="hljs-attr">"title"</span>: <span class="hljs-string">"{title}"</span>,
+            <span class="hljs-attr">"description"</span>: <span class="hljs-string">"{description}"</span>,
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+            <span class="hljs-attr">"price"</span>: <span class="hljs-string">"{price}"</span>,
+            <span class="hljs-attr">"totalArea"</span>: <span class="hljs-string">"{total area}"</span>,
+            <span class="hljs-attr">"beds"</span>: <span class="hljs-string">"{total beds}"</span>,
+            <span class="hljs-attr">"baths"</span>: <span class="hljs-string">"{total baths}"</span>,
+            <span class="hljs-attr">"build"</span>: <span class="hljs-string">"{build time}"</span>,
+            <span class="hljs-attr">"credit_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"income_report"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"background_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"house_images"</span>:[
+                {
+                    <span class="hljs-attr">"fieldname"</span>: <span class="hljs-string">"{field name}"</span>,
+                    <span class="hljs-attr">"originalname"</span>: <span class="hljs-string">"{original name}"</span>,
+                    <span class="hljs-attr">"encoding"</span>: <span class="hljs-string">"{encoding}"</span>,
+                    <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{mimet ype}"</span>,
+                    <span class="hljs-attr">"destination"</span>: <span class="hljs-string">"{destination}"</span>,
+                    <span class="hljs-attr">"filename"</span>: <span class="hljs-string">"{file name}"</span>,
+                    <span class="hljs-attr">"path"</span>: <span class="hljs-string">"{path}"</span>,
+                    <span class="hljs-attr">"size"</span>: <span class="hljs-string">"{size}"</span>
+                }
+                //JSON Array
+            ]
+        },
+        <span class="hljs-attr">"location"</span>: {
+            <span class="hljs-attr">"street"</span>: <span class="hljs-string">"{street}"</span>,
+            <span class="hljs-attr">"city"</span>: <span class="hljs-string">"{city}"</span>,
+            <span class="hljs-attr">"county"</span>: <span class="hljs-string">"{county}"</span>,
+            <span class="hljs-attr">"gpcode"</span>: <span class="hljs-string">"{google place code}"</span>,
+            <span class="hljs-attr">"state"</span>: <span class="hljs-string">"{State}"</span>,
+            <span class="hljs-attr">"zipcode"</span>: <span class="hljs-string">"{Zipcode}"</span>,
+            <span class="hljs-attr">"zone"</span>: <span class="hljs-string">"{Gov Zone}"</span>
+        },
+        <span class="hljs-attr">"status"</span>: {
+            <span class="hljs-attr">"active"</span>: <span class="hljs-string">"{true||false}"</span>
+        },
+        <span class="hljs-attr">"created"</span>: <span class="hljs-string">"{current Timestamp}"</span>,
+        <span class="hljs-attr">"lastUpdated"</span>: <span class="hljs-string">"{last updated Timestamp}"</span>,
+        <span class="hljs-attr">"view"</span>: <span class="hljs-string">"{totle view}"</span>
+    },
+    ...JSON ARRAY
+]</pre>
+<h4 id="status-code-13">Status Code</h4>
+<pre class='hljs'>200 OK
+404 House Not Found
+500 Server Error</pre>
+</div></div><div data-title="最热房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="最热房源">最热房源</h3>
+<p>获取最热房源</p>
+<p>**count代表请求的数量，如count 是 5， 会返回最新的5条数据。 如果count等于0， 会返回所有数据的列表。</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/listing/fetch/hot/<span class="strong">{count}</span></div>
+    </div>
+<h4 id="example-response-15">Example Response</h4>
+<pre class='hljs'>[
+     {
+        <span class="hljs-attr">"_id"</span>: <span class="hljs-string">"{OBJID}"</span>,
+        <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+        <span class="hljs-attr">"agentID"</span>: <span class="hljs-string">"{agent Id}"</span>,
+        <span class="hljs-attr">"detail"</span>: {
+            <span class="hljs-attr">"title"</span>: <span class="hljs-string">"{title}"</span>,
+            <span class="hljs-attr">"description"</span>: <span class="hljs-string">"{description}"</span>,
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"{type}"</span>,
+            <span class="hljs-attr">"price"</span>: <span class="hljs-string">"{price}"</span>,
+            <span class="hljs-attr">"totalArea"</span>: <span class="hljs-string">"{total area}"</span>,
+            <span class="hljs-attr">"beds"</span>: <span class="hljs-string">"{total beds}"</span>,
+            <span class="hljs-attr">"baths"</span>: <span class="hljs-string">"{total baths}"</span>,
+            <span class="hljs-attr">"build"</span>: <span class="hljs-string">"{build time}"</span>,
+            <span class="hljs-attr">"credit_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"income_report"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"background_check"</span>: <span class="hljs-string">"{true or false}"</span>,
+            <span class="hljs-attr">"house_images"</span>:[
+                {
+                    <span class="hljs-attr">"fieldname"</span>: <span class="hljs-string">"{field name}"</span>,
+                    <span class="hljs-attr">"originalname"</span>: <span class="hljs-string">"{original name}"</span>,
+                    <span class="hljs-attr">"encoding"</span>: <span class="hljs-string">"{encoding}"</span>,
+                    <span class="hljs-attr">"mimetype"</span>: <span class="hljs-string">"{mimet ype}"</span>,
+                    <span class="hljs-attr">"destination"</span>: <span class="hljs-string">"{destination}"</span>,
+                    <span class="hljs-attr">"filename"</span>: <span class="hljs-string">"{file name}"</span>,
+                    <span class="hljs-attr">"path"</span>: <span class="hljs-string">"{path}"</span>,
+                    <span class="hljs-attr">"size"</span>: <span class="hljs-string">"{size}"</span>
+                }
+                //JSON Array
+            ]
+        },
+        <span class="hljs-attr">"location"</span>: {
+            <span class="hljs-attr">"street"</span>: <span class="hljs-string">"{street}"</span>,
+            <span class="hljs-attr">"city"</span>: <span class="hljs-string">"{city}"</span>,
+            <span class="hljs-attr">"county"</span>: <span class="hljs-string">"{county}"</span>,
+            <span class="hljs-attr">"gpcode"</span>: <span class="hljs-string">"{google place code}"</span>,
+            <span class="hljs-attr">"state"</span>: <span class="hljs-string">"{State}"</span>,
+            <span class="hljs-attr">"zipcode"</span>: <span class="hljs-string">"{Zipcode}"</span>,
+            <span class="hljs-attr">"zone"</span>: <span class="hljs-string">"{Gov Zone}"</span>
+        },
+        <span class="hljs-attr">"status"</span>: {
+            <span class="hljs-attr">"active"</span>: <span class="hljs-string">"{true||false}"</span>
+        },
+        <span class="hljs-attr">"created"</span>: <span class="hljs-string">"{current Timestamp}"</span>,
+        <span class="hljs-attr">"lastUpdated"</span>: <span class="hljs-string">"{last updated Timestamp}"</span>,
+        <span class="hljs-attr">"view"</span>: <span class="hljs-string">"{totle view}"</span>
+    },
+    ...JSON ARRAY
+]</pre>
+<h4 id="status-code-14">Status Code</h4>
+<pre class='hljs'>200 OK
+404 House Not Found
+500 Server Error</pre>
+</div></div><div data-title="收藏房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="收藏房源">收藏房源</h3>
+<p>处理收藏房源操作，需要前台发送以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+<tr>
+<td><code>listingID</code></td>
+<td>(必须) 当前房源的ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/favorite/create</div>
+    </div>
+<h4 id="example-response-16">Example response</h4>
+<pre class='hljs'>{
+ <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"data"</span>: { 
+        <span class="hljs-attr">"userID"</span>: <span class="hljs-string">"5a62de600ab3fd15bc4c946b"</span>,
+        <span class="hljs-attr">"listingID"</span>: <span class="hljs-string">"5a66417d4219da281815369c"</span>
+    }
+}</pre>
+<h4 id="status-code-15">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="取消收藏" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="取消收藏">取消收藏</h3>
+<p>处理取消收藏房源操作，需要前台发送以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+<tr>
+<td><code>listingID</code></td>
+<td>(必须) 需要取消收藏的房源的ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/favorite/remove</div>
+    </div>
+<h4 id="example-response-17">Example response</h4>
+<pre class='hljs'>{
+ <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"data"</span>: { 
+        <span class="hljs-attr">"userID"</span>: <span class="hljs-string">"5a62de600ab3fd15bc4c946b"</span>,
+        <span class="hljs-attr">"listingID"</span>: <span class="hljs-string">"5a66417d4219da281815369c"</span>
+    }
+}</pre>
+<h4 id="status-code-16">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="检测是否收藏" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="检测是否收藏">检测是否收藏</h3>
+<p>处理检测是否已收藏当前房源，需要前台发送以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+<tr>
+<td><code>listingID</code></td>
+<td>(必须) 需要取消收藏的房源的ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/favorite/distinct</div>
+    </div>
+<h4 id="example-response-18">Example response</h4>
+<pre class='hljs'>//如果已收藏该房源：
+{
+ "success": true,
+  "isDistinct": false 
+}
+
+//如果未收藏该房源：
+{
+ "success": true,
+  "isDistinct": true 
+}</pre>
+<h4 id="status-code-17">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="获取收藏列表" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="获取收藏列表">获取收藏列表</h3>
+<p>获取当前登录用户的收藏列表：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/favorite/fetch</div>
+    </div>
+<h4 id="example-response-19">Example response</h4>
+<pre class='hljs'>[
+    {
+    "success": true,
+    "data": { 
+            "userID": "5a62de600ab3fd15bc4c946b",
+            "listingID": "5a66417d4219da281815369c"
+        }
+    },
+    {
+        ...
+    }
+]</pre>
+</div></div><div data-title="获取收藏列表及房源列表(APP)" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="获取收藏列表及房源列表app">获取收藏列表及房源列表(APP)</h3>
+<p>获取当前登录用户的收藏列表：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/favorite/listing</div>
+    </div>
+<h4 id="example-response-20">Example response</h4>
+<pre class='hljs'>{
+<span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+<span class="hljs-attr">"data"</span>: [
+    {
+        <span class="hljs-attr">"房源1"</span>
+    },
+    {
+        <span class="hljs-attr">"房源2"</span>
+    },
+    ...
+]</pre>
+<h4 id="status-code-18">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="举报房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="举报房源">举报房源</h3>
+<p>处理举报房源操作，需要前台发送以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+<tr>
+<td><code>listingID</code></td>
+<td>(必须) 当前房源的ID</td>
+</tr>
+<tr>
+<td><code>agentID</code></td>
+<td>(必须) 当前房源的经纪人ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/abuse/create</div>
+    </div>
+<h4 id="example-response-21">Example response</h4>
+<pre class='hljs'>{
+ "success": true,
+  "data": "举报成功"
+}
+//或
+{
+ "success": false,
+  "data": "举报失败"
+}</pre>
+<h4 id="status-code-19">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="检测是否举报" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="检测是否举报">检测是否举报</h3>
+<p>处理检测是否已举报当前房源，需要前台发送以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>userID</code></td>
+<td>(必须) 当前用户的用户16位ID</td>
+</tr>
+<tr>
+<td><code>listingID</code></td>
+<td>(必须) 需要取消收藏的房源的ID</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/action/abuse/distinct</div>
+    </div>
+<h4 id="example-response-22">Example response</h4>
+<pre class='hljs'>//如果已举报该房源：
+{
+ "success": true,
+  "isDistinct": false 
+}
+
+//如果未举报该房源：
+{
+ "success": true,
+  "isDistinct": true 
+}</pre>
+<h4 id="status-code-20">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="Search Listing by keyword" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="search-listing-by-keyword">Search Listing by keyword</h3>
+<p>Search House by keyword and type</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>(required) sell / rent</td>
+</tr>
+<tr>
+<td><code>query</code></td>
+<td>(required) key word</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/search/keyword?type=<span class="strong">{Type}</span>&query=<span class="strong">{Search_Key_Word}</span></div>
+    </div>
+<h4 id="example-response-23">Example Response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"pageCount"</span>: <span class="hljs-string">"{total page number of house listing page}"</span>,
+    <span class="hljs-attr">"results"</span>: [<span class="hljs-string">"JSON Array, See Fetch A listing"</span>]
+}</pre>
+<h4 id="status-code-21">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="Ask" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="ask">Ask</h3>
+<p>Ask a agent</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agentId</code></td>
+<td>(required) Agent's Object Id</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>(required) Asker's Name</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>(required) Asker's Phone</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>(required) Asking Content</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/contact/ask</div>
+    </div>
+<h4 id="example-response-24">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>
+}</pre>
+<h4 id="status-code-22">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="Commission" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="commission">Commission</h3>
+<p>Commission a agent</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agentId</code></td>
+<td>(required) Agent's Object Id</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>(required) Asker's Name</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>(required) Asker's Phone</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>(required) Asking Content</td>
+</tr>
+</tbody>
+</table>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>POST</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/contact/commission</div>
+    </div>
+<h4 id="example-response-25">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>
+}</pre>
+<h4 id="status-code-23">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="Fetch A News content" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="fetch-a-news-content">Fetch A News content</h3>
+<p>通过新闻ID来获取新闻页面
+回复的link前面需要加上live 网站的前缀，例如：<a href="https://www.fangsosou.com">https://www.fangsosou.com</a></p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/news/web/<span class="strong">{OBJID}</span></div>
+    </div>
+<h4 id="example-response-26">Example Response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"link"</span>: <span class="hljs-string">"/news/{Object ID}"</span>
+}</pre>
+<h4 id="status-code-24">Status Code</h4>
+<pre class='hljs'>200 OK
+404 News Not Found
+500 Server Error</pre>
+</div></div><div data-title="Fetch News Listing" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="fetch-news-listing">Fetch News Listing</h3>
+<p>Fetch the news list</p>
+<p>**If the limit is equal to 0, it returns the entire news collection (no limit)</p>
+<p>**limit代表请求的新闻数量，如limit 是 5， 会返回最新的5条新闻。 如果limit等于0， 会返回所有新闻的列表。</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/news/list/<span class="strong">{limit}</span></div>
+    </div>
+<h4 id="example-response-27">Example Response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"pageCount"</span>: <span class="hljs-string">"{total page number of house listing page}"</span>,
+    <span class="hljs-attr">"results"</span>: [<span class="hljs-string">"JSON Array, See Fetch a listing"</span>]
+}</pre>
+<h4 id="status-code-25">Status Code</h4>
+<pre class='hljs'>200 OK
+404 News Not Found
+500 Server Error</pre>
+</div></div><div data-title="广告列表" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="广告列表">广告列表</h3>
+<p>**count代表请求的广告数量，如count 是 5， 会返回最新的5条广告。 如果count等于0， 会返回所有广告的列表。</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/panel/ads/listingByCount/<span class="strong">{count}</span></div>
+    </div>
+<h4 id="example-response-28">Example response</h4>
+<pre class='hljs'>{
+    [
+        {
+            _id: "5a4574ffa51740dbbfddd2b8",
+            title: "12312412412",
+            content: "",
+            image: {
+                fieldname: "image",
+                originalname: "Photo on 1-31-17 at 9.14 AM #2.jpg",
+                encoding: "7bit",
+                mimetype: "image/jpeg",
+                destination: "asset/img",
+                filename: "image-1514500571478",
+                path: "asset/img/image-1514500571478",
+                size: 267689
+            },
+            type: "",
+            created_at: 1514501375138,
+            views: 0
+        },
+        {
+            ...JSON OBJECT
+        }
+    ],
+    [
+        ...
+    ]
+}</pre>
+<h4 id="status-code-26">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="广告页面" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="广告页面">广告页面</h3>
+<p>获取广告页面链接
+回复的link前面需要加上live 网站的前缀，例如：<a href="https://www.fangsosou.com">https://www.fangsosou.com</a></p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/panel/ads/web/:id</div>
+    </div>
+<h4 id="example-response-29">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"link"</span>: <span class="hljs-string">"/ads/{OBJECTID}"</span>
+}</pre>
+<h4 id="status-code-27">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="本日新增房源" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="本日新增房源">本日新增房源</h3>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/panel/report/getListingDailyCount</div>
+    </div>
+<h4 id="example-response-30">Example response</h4>
+<pre class='hljs'>{
+    <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"count"</span>: number
+}</pre>
+<h4 id="status-code-28">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div><div data-title="中介当月新增房源数及房源总数" class="keyline-top section contain clearfix "><div class="space-bottom8 col6 pad2x prose clip"><h3 id="中介当月新增房源数及房源总数">中介当月新增房源数及房源总数</h3>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5"><div class='endpoint dark fill-dark round '>
+      <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>GET</div>
+      <div class='pad0 code small endpoint-url'>/api/v1/user/info/agentListingInfo/<span class="strong">{agentID}</span></div>
+    </div>
+<h4 id="example-response-31">Example response</h4>
+<h4 id="status-code-29">Status Code</h4>
+<pre class='hljs'>200 OK
+500 Server Error</pre>
+</div></div></div></div></div><div class="fill-dark dark bottom-shadow fixed-top pad0 width16"><a href="/" class="active space-top1 space-left1 pin-topleft icon round dark pad0 fill-red"></a><div class="strong small pad0
+          
+          space-left4 line-height15">房搜搜api</div></div></div></div><!--STOP-->
+    <script src='bundle.js'></script>
+  </body>
+</html>
