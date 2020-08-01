@@ -2,9 +2,9 @@
  <img src="https://i.imgur.com/rSyq3MW.png" alt="The Documentation"></a>
 </p>
 
-<h2 align="center">Docbox</h2>
+<h2 align="center">[fangsosou](https://fangsosou.com/buy)API Docs</h2>
 
-<div align="center">
+<div align="left">
   
   [![Status](https://img.shields.io/badge/status-active-success.svg)](https://fangsosou.com/login)
   [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/YongLAGCC/fangsosou_documents/issues)
