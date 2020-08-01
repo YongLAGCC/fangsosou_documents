@@ -2,7 +2,7 @@
  <img src="https://i.imgur.com/rSyq3MW.png" alt="The Documentation"></a>
 </p>
 
-<h2 align="center">[fangsosou](https://fangsosou.com/buy)API Docs</h2>
+<h2 align="center">https://fangsosou.com/buy API Docs</h2>
 
 <div align="left">
   
